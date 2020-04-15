@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8" pageEncoding="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Notatnik</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="col-md-12" align="center">
+    <br />
+    <div th:class="${successMessage != null} ? 'alert alert-success col-md-8' : 'invisible'" role="alert">
+        <p th:text="${successMessage}" />
+    </div>
+</div>
+
+    <div class="card text-center">
+        <div class="card-body">
+            <h2>Notatnik</h2>
+        </div>
+    </div><br>
+    <a href="/add-form"><img src="icon/file-add.svg" width="32" height="32"></a><br><br>
+    <div class="card-colums">
+        <div class="card bg-light mb-3" th:each="note : ${notes.content}">
+            <div class="card-header">
+                <a th:href="@{/edit-form/{id}(id=${note.id})}"><img src="icon/pencil.svg"></a>
+                <a th:href="@{/delete/{id}(id=${note.id})}"><img src="icon/trash.svg"></a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${note.title}" />
+                <h6 class="card-subtitle mb-2 text-muted" th:text="${note.description}" />
+                <p class="card-text" th:text="${note.text}" />
+                <p class="card-text">
+                    <small class="text-muted" th:text="${'Utworzona: ' + note.created}" /><br>
+                    <small class="text-muted" th:text="${'Zmodyfikowana: ' + note.modified}" />
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${notes.number+1==1} ? disabled">
+            <a class="page-link" th:href="@{/(size=${notes.size}, page=${notes.number})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:if="${notes.totalPages > 0}" th:each="i : ${#numbers.sequence(1, notes.totalPages)}"
+            th:classappend="${i==notes.number+1} ? active">
+            <a class="page-link" th:href="@{/(size=${notes.size}, page=${i})}" th:text="${i}" />
+        </li>
+        <li class="page-item" th:classappend="${notes.totalPages==notes.number+1} ? disabled">
+            <a class="page-link" th:href="@{/(size=${notes.size}, page=${notes.number+2})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+
+</body>
+</html>
