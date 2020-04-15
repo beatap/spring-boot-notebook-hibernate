@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notebook")
+@Table(name = "notebooks")
 @Data
 @NoArgsConstructor
 public class Notebook {
