@@ -15,7 +15,6 @@ import pl.beata.springbootnotebookhibernate.model.Notebook;
 import pl.beata.springbootnotebookhibernate.service.NotebookService;
 
 import javax.validation.Valid;
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 @Controller
@@ -23,8 +22,6 @@ public class NotebookController {
 
     private NotebookService notebookService;
 
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
-    private static final Charset ISO = Charset.forName("ISO-8859-1");
 
     public NotebookController(NotebookService notebookService) {
         this.notebookService = notebookService;
@@ -34,14 +31,12 @@ public class NotebookController {
     @GetMapping("/")
     public String listNote(@RequestParam Optional<Integer> page,
                            @RequestParam Optional<Integer> size,
-                           //@RequestParam(required = false) String successMessage,
                            Model model) {
         int pageReq = page.orElseGet(() -> Integer.valueOf(1).intValue());
         int sizeReq = size.orElseGet(() -> Integer.valueOf(2).intValue());
         Page<Notebook> notebookPage = notebookService.getNotes(PageRequest.of(pageReq - 1, sizeReq, Sort.by("created").descending()));
 
         model.addAttribute("notes", notebookPage);
-        //model.addAttribute("successMessage", successMessage);
 
         return "index";
     }
